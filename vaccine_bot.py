@@ -60,11 +60,8 @@ def sendTweet():
         auth.set_access_token(access_token, access_token_secret)
         api = tweepy.API(auth)
 
-        if(found_vaccine):
-                tweet_text = formTweetText(timestamp)
-        else:
-                tweet_text = "No appointments found as of: " + timestamp.ctime()
-        # tweet_text = formTweetText(timestamp)
+
+        tweet_text = formTweetText(timestamp)
         api.update_status(tweet_text)
         print("Tweet sent at: " + datetime.now().ctime())
 
@@ -73,6 +70,5 @@ checkVaccineAppointment()
 if(found_vaccine):
         sendTweet()
 else:
-        sendTweet() ## for debugging heroku and cron
         print("No vaccines available at: " + datetime.now().ctime())
 
