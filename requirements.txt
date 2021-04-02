@@ -1,5 +1,3 @@
 requests
-time
 tweepy
-os
 dateutil.parser
