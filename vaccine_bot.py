@@ -6,6 +6,7 @@ import dateutil.parser
 from datetime import datetime
 import re
 
+
 state = "CA"
 city = "SAN DIEGO"
 
@@ -52,7 +53,7 @@ def formTweetText(updated_timestamp):
         time_string = "As of: " + re.sub('\s+', ' ', time_string)
         notification_string = "Appointments found at CVS locations in San Diego!"
         reservation_string = "Schedule here:" 
-        reservation_url = "https://www.cvs.com/vaccine/intake/store/covid-screener/covid-qns"
+        reservation_url = "https://www.cvs.com/immunizations/covid-19-vaccine"
         return (time_string + "\n\n" + notification_string + "\n\n" + reservation_string + "\n" + reservation_url)
         
 def sendTweet():
