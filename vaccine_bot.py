@@ -99,7 +99,6 @@ def checkWalgreensVaccineAppointment():
         walgreens_referer = "https://www.walgreens.com/findcare/vaccination/covid-19/location-screening"
         walgreens_headers = {'Content-Type': 'application/json', 'cookie': walgreens_cookie, 'Referer': walgreens_referer, 'x-xsrf-token': walgreens_token}
         current_date = current_time.today().strftime('%Y-%m-%d')
-        print(walgreens_headers)
         # --WALGREENS PAYLOAD--
         # {'serviceId':"99", 
         # 'position': 
@@ -116,9 +115,7 @@ def checkWalgreensVaccineAppointment():
 
         walgreens_payload = {'serviceId':"99", 'position': { 'latitude': latitude, 'longitude': longitude }, 'appointmentAvailability': { 'startDateTime': current_date }, 'radius': walgreens_radius }
         walgreens_payload = json_module.dumps(walgreens_payload)
-        print("PAYLOAD:" + walgreens_payload)
         walgreens_response = requests.post(walgreens_request_url, data=walgreens_payload, headers=walgreens_headers)
-        print("RESPONSE:" + str(walgreens_response))
         walgreens_json = walgreens_response.json()
         if(walgreens_json["appointmentsAvailable"]):
                 found_vaccine_walgreens = True
@@ -171,20 +168,13 @@ except:
         print("EXCEPTION IN FINDING VONS VACCINES")
 
 
-## check walgreens
-# try:
-#         checkWalgreensVaccineAppointment()
-#         if(found_vaccine_walgreens):
-#                 walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_request_url)
-#                 sendTweet(walgreens_tweet_text)
-#         else:
-#                 print("No Walgreens vaccines available at: " + current_time.ctime())
-# except:
-#         print("EXCEPTION IN FINDING WALGREENS VACCINES")
-
-checkWalgreensVaccineAppointment()
-if(found_vaccine_walgreens):
-        walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_reservation_url, walgreens_radius)
-        sendTweet(walgreens_tweet_text)
-else:
-        print("No Walgreens vaccines available at: " + current_time.ctime())
+# check walgreens
+try:
+        checkWalgreensVaccineAppointment()
+        if(found_vaccine_walgreens):
+                walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_request_url)
+                sendTweet(walgreens_tweet_text)
+        else:
+                print("No Walgreens vaccines available at: " + current_time.ctime())
+except:
+        print("EXCEPTION IN FINDING WALGREENS VACCINES")
