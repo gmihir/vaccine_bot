@@ -5,8 +5,9 @@ import os
 import dateutil.parser
 from datetime import datetime
 import re
-from pytz import timezone
 import pytz
+from pytz import timezone
+
 
 
 state = "CA"
