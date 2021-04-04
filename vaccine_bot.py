@@ -168,13 +168,19 @@ except:
 
 
 ## check walgreens
-try:
-        checkWalgreensVaccineAppointment()
-        if(found_vaccine_walgreens):
-                walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_request_url)
-                sendTweet(walgreens_tweet_text)
-        else:
-                print("No Walgreens vaccines available at: " + current_time.ctime())
-except:
-        print("EXCEPTION IN FINDING WALGREENS VACCINES")
+# try:
+#         checkWalgreensVaccineAppointment()
+#         if(found_vaccine_walgreens):
+#                 walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_request_url)
+#                 sendTweet(walgreens_tweet_text)
+#         else:
+#                 print("No Walgreens vaccines available at: " + current_time.ctime())
+# except:
+#         print("EXCEPTION IN FINDING WALGREENS VACCINES")
 
+checkWalgreensVaccineAppointment()
+if(found_vaccine_walgreens):
+        walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_request_url)
+        sendTweet(walgreens_tweet_text)
+else:
+        print("No Walgreens vaccines available at: " + current_time.ctime())

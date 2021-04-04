@@ -2,4 +2,3 @@ requests
 tweepy
 python-dateutil
 pytz
-json
