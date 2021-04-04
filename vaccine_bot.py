@@ -118,7 +118,7 @@ def checkWalgreensVaccineAppointment():
         walgreens_payload = json_module.dumps(walgreens_payload)
         print("PAYLOAD:" + walgreens_payload)
         walgreens_response = requests.post(walgreens_request_url, data=walgreens_payload, headers=walgreens_headers)
-        print("RESPONSE:" + walgreens_response)
+        print("RESPONSE:" + str(walgreens_response))
         walgreens_json = walgreens_response.json()
         if(walgreens_json["appointmentsAvailable"]):
                 found_vaccine_walgreens = True
@@ -184,7 +184,7 @@ except:
 
 checkWalgreensVaccineAppointment()
 if(found_vaccine_walgreens):
-        walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_request_url)
+        walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_reservation_url, walgreens_radius)
         sendTweet(walgreens_tweet_text)
 else:
         print("No Walgreens vaccines available at: " + current_time.ctime())
