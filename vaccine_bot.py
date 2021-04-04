@@ -90,6 +90,11 @@ def checkVonsVaccineAppointment():
                 vons_vaccine_availability = True
 
 
+def checkWalgreensVaccineAppointment():
+        walgreens_referer = "https://www.walgreens.com/findcare/vaccination/covid-19/location-screening"
+        walgreens_headers = {'cookie': walgreens_cookie, 'Referer': walgreens_referer, 'x-xsrf-token': walgreens_token}
+
+
 
 def formTweetText(vendor, updated_timestamp, reservation_url):
         time_string = updated_timestamp.ctime()
@@ -118,7 +123,7 @@ try:
                 cvs_tweet_text = formTweetText(cvs_vendor, timestamp, cvs_reservation_url)
                 sendTweet(cvs_tweet_text)
         else:
-                print("No CVS vaccines available at: " + datetime.now().ctime())
+                print("No CVS vaccines available at: " + current_time.ctime())
 except:
         # something failed, log failure
         print("EXCEPTION IN FINDING CVS VACCINES")
