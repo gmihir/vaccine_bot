@@ -116,7 +116,9 @@ def checkWalgreensVaccineAppointment():
 
         walgreens_payload = {'serviceId':"99", 'position': { 'latitude': latitude, 'longitude': longitude }, 'appointmentAvailability': { 'startDateTime': current_date }, 'radius': walgreens_radius }
         walgreens_payload = json_module.dumps(walgreens_payload)
+        print("PAYLOAD:" + walgreens_payload)
         walgreens_response = requests.post(walgreens_request_url, data=walgreens_payload, headers=walgreens_headers)
+        print("RESPONSE:" + walgreens_response)
         walgreens_json = walgreens_response.json()
         if(walgreens_json["appointmentsAvailable"]):
                 found_vaccine_walgreens = True
