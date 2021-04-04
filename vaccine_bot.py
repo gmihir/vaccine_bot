@@ -99,7 +99,7 @@ def checkWalgreensVaccineAppointment():
         walgreens_referer = "https://www.walgreens.com/findcare/vaccination/covid-19/location-screening"
         walgreens_headers = {'Content-Type': 'application/json', 'cookie': walgreens_cookie, 'Referer': walgreens_referer, 'x-xsrf-token': walgreens_token}
         current_date = current_time.today().strftime('%Y-%m-%d')
-
+        print(walgreens_headers)
         # --WALGREENS PAYLOAD--
         # {'serviceId':"99", 
         # 'position': 
