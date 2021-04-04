@@ -6,6 +6,7 @@ import dateutil.parser
 from datetime import datetime
 import re
 import pytz
+import json as json_module
 from pytz import timezone
 
 
@@ -43,14 +44,16 @@ cvs_vendor = "CVS"
 ## walgreens
 walgreens_reservation_url = "https://www.walgreens.com/findcare/vaccination/covid-19"
 walgreens_vendor = "Walgreens"
+walgreens_radius = 25
 
 ## vons
 vons_reservation_url = "https://www.mhealthappointments.com/covidappt"
 vons_vendor = "Vons"
+vons_radius = 50
 
 
-longitude = os.environ.get("LONGITUDE")
-latitude = os.environ.get("LATITUDE")
+longitude = float(os.environ.get("LONGITUDE"))
+latitude = float(os.environ.get("LATITUDE"))
 
 
 found_vaccine_cvs = False
@@ -87,21 +90,45 @@ def checkVonsVaccineAppointment():
         vons_response = requests.get(vons_request_url)
         vons_vaccine_availability = vons_response.json()
         if(vons_vaccine_availability):
-                vons_vaccine_availability = True
+                found_vaccine_vons = True
 
 
 def checkWalgreensVaccineAppointment():
         walgreens_referer = "https://www.walgreens.com/findcare/vaccination/covid-19/location-screening"
-        walgreens_headers = {'cookie': walgreens_cookie, 'Referer': walgreens_referer, 'x-xsrf-token': walgreens_token}
+        walgreens_headers = {'Content-Type': 'application/json', 'cookie': walgreens_cookie, 'Referer': walgreens_referer, 'x-xsrf-token': walgreens_token}
+        current_date = current_time.today().strftime('%Y-%m-%d')
+
+        # --WALGREENS PAYLOAD--
+        # {'serviceId':"99", 
+        # 'position': 
+        #         {
+        #                 'latitude': latitude,
+        #                 'longitude': longitude
+        #         },
+        # 'appointmentAvailability': 
+        #         {
+        #                 'startDateTime': current_date
+        #         },
+        # 'radius': walgreens_radius
+        # }
+
+        walgreens_payload = {'serviceId':"99", 'position': { 'latitude': latitude, 'longitude': longitude }, 'appointmentAvailability': { 'startDateTime': current_date }, 'radius': walgreens_radius }
+        walgreens_payload = json_module.dumps(walgreens_payload)
+        walgreens_response = requests.post(walgreens_request_url, data=walgreens_payload, headers=walgreens_headers)
+        walgreens_json = walgreens_response.json()
+        if(walgreens_json["appointmentsAvailable"]):
+                found_vaccine_walgreens = True
 
 
-
-def formTweetText(vendor, updated_timestamp, reservation_url):
+def formTweetText(vendor, updated_timestamp, reservation_url, radius=None):
         time_string = updated_timestamp.ctime()
 
         ## strip out extra spaces
         time_string = "As of: " + re.sub('\s+', ' ', time_string)
-        notification_string = "Appointments found at " + vendor + " locations in San Diego!"
+        if(radius):
+                notification_string = "Appointments found at " + vendor + " locations in a " + str(radius) + " mile radius from San Diego!"
+        else:
+                notification_string = "Appointments found at " + vendor + " locations in San Diego!"
         reservation_string = "Schedule here:" 
         return (time_string + "\n\n" + notification_string + "\n\n" + reservation_string + "\n" + reservation_url)
         
@@ -128,7 +155,7 @@ except:
         # something failed, log failure
         print("EXCEPTION IN FINDING CVS VACCINES")
 
-## check vons
+# ## check vons
 try:
         checkVonsVaccineAppointment()
         if(found_vaccine_vons):
@@ -140,6 +167,14 @@ except:
         print("EXCEPTION IN FINDING VONS VACCINES")
 
 
-
-
+## check walgreens
+try:
+        checkWalgreensVaccineAppointment()
+        if(found_vaccine_walgreens):
+                walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_request_url)
+                sendTweet(walgreens_tweet_text)
+        else:
+                print("No Walgreens vaccines available at: " + current_time.ctime())
+except:
+        print("EXCEPTION IN FINDING WALGREENS VACCINES")
 
