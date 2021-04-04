@@ -87,6 +87,7 @@ def checkCVSVaccineAppointment():
 
 
 def checkVonsVaccineAppointment():
+        global found_vaccine_vons
         vons_response = requests.get(vons_request_url)
         vons_vaccine_availability = vons_response.json()
         if(vons_vaccine_availability):
@@ -94,6 +95,7 @@ def checkVonsVaccineAppointment():
 
 
 def checkWalgreensVaccineAppointment():
+        global found_vaccine_walgreens
         walgreens_referer = "https://www.walgreens.com/findcare/vaccination/covid-19/location-screening"
         walgreens_headers = {'Content-Type': 'application/json', 'cookie': walgreens_cookie, 'Referer': walgreens_referer, 'x-xsrf-token': walgreens_token}
         current_date = current_time.today().strftime('%Y-%m-%d')
