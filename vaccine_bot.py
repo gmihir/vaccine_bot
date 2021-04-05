@@ -143,7 +143,6 @@ def sendTweet(text):
         print("Tweet sent at: " + current_time.ctime())
         print("Tweet text: " + text)
 
-
 # check cvs
 try:
         checkCVSVaccineAppointment()
@@ -172,7 +171,7 @@ except:
 try:
         checkWalgreensVaccineAppointment()
         if(found_vaccine_walgreens):
-                walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_request_url)
+                walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_reservation_url)
                 sendTweet(walgreens_tweet_text)
         else:
                 print("No Walgreens vaccines available at: " + current_time.ctime())
