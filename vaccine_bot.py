@@ -159,7 +159,7 @@ except:
 try:
         checkVonsVaccineAppointment()
         if(found_vaccine_vons):
-                vons_tweet_text = formTweetText(vons_vendor, current_time, vons_reservation_url)
+                vons_tweet_text = formTweetText(vons_vendor, current_time, vons_reservation_url, vons_radius)
                 sendTweet(vons_tweet_text)
         else:
                 print("No Vons vaccines available at: " + current_time.ctime())
@@ -171,7 +171,7 @@ except:
 try:
         checkWalgreensVaccineAppointment()
         if(found_vaccine_walgreens):
-                walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_reservation_url)
+                walgreens_tweet_text = formTweetText(walgreens_vendor, current_time, walgreens_reservation_url, walgreens_radius)
                 sendTweet(walgreens_tweet_text)
         else:
                 print("No Walgreens vaccines available at: " + current_time.ctime())
